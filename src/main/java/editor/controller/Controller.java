@@ -23,6 +23,7 @@ public class Controller {
         this.stage = stage;
     }
 
+    // initialize menu bar with menu items and return menubar
     public MenuBar intiMenuBar() {
         menuBar = new MenuBar();
         separator = new SeparatorMenuItem();
@@ -32,12 +33,15 @@ public class Controller {
         initAbout();
         return menuBar;
     }
+
+    // initialize textarea with font and size and return textarea
     public TextArea addTextArea() {
         textArea = new TextArea();
         textArea.setFont(Font.font("Helvetica Neue",22));
         return textArea;
     }
 
+    // alertbox when user exits application
     public void alertBox() {
         Stage alert = new Stage();
         alert.setTitle("Alert");
@@ -90,18 +94,6 @@ public class Controller {
     private void initSetting() {
         Menu setting = new Menu("Setting");
         RadioMenuItem darkMode = new RadioMenuItem("Dark Mode");
-//        darkMode.selectedProperty().addListener(new ChangeListener<Boolean>() {
-//            @Override
-//            public void changed(ObservableValue<? extends Boolean> obs, Boolean wasPreviouslySelected, Boolean isNowSelected) {
-//                dark = new DarkMode(textArea,menuBar);
-//                if (isNowSelected) {
-//                    dark.darkModeOn();
-//                } else {
-//                    dark.darkModeOff();
-//                }
-//            }
-//        });
-
         MenuItem fullscreen = new MenuItem("Full Screen");
         fullscreen.setOnAction(e -> stage.setFullScreen(true));
         MenuItem fullSetting = new MenuItem("Full setting");
