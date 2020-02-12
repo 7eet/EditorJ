@@ -11,6 +11,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Controller {
     private Stage stage;
@@ -18,6 +20,7 @@ public class Controller {
     private TextArea textArea;
     private SeparatorMenuItem separator;
     private MenuItemStrategy itemStrategy;
+    private static final Logger logger = LogManager.getLogger(Controller.class);
 
     public Controller(Stage stage) {
         this.stage = stage;
@@ -27,10 +30,12 @@ public class Controller {
     public MenuBar intiMenuBar() {
         menuBar = new MenuBar();
         separator = new SeparatorMenuItem();
+        logger.debug("Controller Class: initializing menubar and its item.");
         initFileMenu();
         initSetting();
         initHelp();
         initAbout();
+        logger.debug("Contoller Class: initialized.");
         return menuBar;
     }
 
@@ -49,6 +54,10 @@ public class Controller {
         alert.setResizable(false);
         Label label = new Label("Do you want to save the file?");
         Button yes = new Button("Yes");
+        yes.setOnAction(e -> {
+            itemStrategy = new SaveFile(textArea,stage);
+            itemStrategy.execute();
+        });
 
         Button no = new Button("No");
         no.setOnAction(e -> {
@@ -59,7 +68,6 @@ public class Controller {
         HBox hbox = new HBox(yes,no);
         hbox.setSpacing(20.0);
         hbox.setAlignment(Pos.CENTER);
-
         VBox vbox = new VBox(label,hbox);
         vbox.setAlignment(Pos.CENTER);
         vbox.setSpacing(20.0);
