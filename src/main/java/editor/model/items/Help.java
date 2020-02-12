@@ -13,6 +13,7 @@ public class Help implements MenuItemStrategy {
     private String help = "This editor is same as notepad.";
     @Override
     public void execute() {
+        logger.debug("Help Class: displaying");
         Stage aboutStage = new Stage();
         aboutStage.setTitle("Help");
         Label label = new Label(help);
@@ -24,5 +25,6 @@ public class Help implements MenuItemStrategy {
         aboutStage.setScene(scene);
         aboutStage.setResizable(false);
         aboutStage.showAndWait();
+        logger.debug("Help Class: closed");
     }
 }

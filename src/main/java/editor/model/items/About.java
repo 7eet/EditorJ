@@ -24,6 +24,7 @@ public class About implements MenuItemStrategy {
             "Thank you :)\n";
     @Override
     public void execute() {
+        logger.debug("About Class: displaying");
         Stage aboutStage = new Stage();
         aboutStage.setTitle("About EditorJ");
         Label label = new Label(about);
@@ -38,5 +39,6 @@ public class About implements MenuItemStrategy {
         aboutStage.setScene(scene);
         aboutStage.setResizable(false);
         aboutStage.showAndWait();
+        logger.debug("About Class: closed");
     }
 }
