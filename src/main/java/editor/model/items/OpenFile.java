@@ -28,6 +28,7 @@ public class OpenFile implements MenuItemStrategy {
         try {
             logger.debug("OpenFile class: adding text to textarea.");
             Stream<String> lines = Files.lines(file.toPath());
+            textArea.setText("");
             lines.forEach(e -> {
                 textArea.appendText(e + "\n");
             });
