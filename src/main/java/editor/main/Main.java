@@ -23,7 +23,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         Controller controller = new Controller(primaryStage);
-        primaryStage.setTitle("EditorJ");
+        primaryStage.setTitle("Editor");
 
         menuBar = controller.intiMenuBar();
         logger.debug("menubar initialized");
