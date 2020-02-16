@@ -1,5 +1,7 @@
 package editor.controller;
 import editor.model.MenuItemStrategy;
+import editor.model.feature.FontProperty;
+import editor.model.feature.BackgroundColor;
 import editor.model.items.About;
 import editor.model.items.OpenFile;
 import editor.model.items.SaveFile;
@@ -42,7 +44,7 @@ public class Controller {
     // initialize textarea with font and size and return textarea
     public TextArea addTextArea() {
         textArea = new TextArea();
-        textArea.setFont(Font.font("Helvetica Neue",22));
+        textArea.setFont(Font.font("Ubuntu Mono",25));
         return textArea;
     }
 
@@ -102,10 +104,18 @@ public class Controller {
     private void initSetting() {
         Menu setting = new Menu("Setting");
         RadioMenuItem darkMode = new RadioMenuItem("Dark Mode");
+      //  darkMode.setOnAction(e -> textArea.setStyle("-fx-control-inner-background:gray"));
         MenuItem fullscreen = new MenuItem("Full Screen");
         fullscreen.setOnAction(e -> stage.setFullScreen(true));
-        MenuItem fullSetting = new MenuItem("Full setting");
-        setting.getItems().addAll(darkMode, fullscreen, separator, fullSetting);
+        MenuItem font = new MenuItem("Change Font");
+        font.setOnAction(e -> {
+            new FontProperty(textArea).execute();
+        });
+        MenuItem background_color = new MenuItem("Change Background Color");
+        background_color.setOnAction(e -> {
+            new BackgroundColor(menuBar,textArea).execute();
+        });
+        setting.getItems().addAll(darkMode, fullscreen, separator, font, background_color);
         menuBar.getMenus().add(setting);
     }
 
