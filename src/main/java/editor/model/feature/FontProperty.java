@@ -31,39 +31,45 @@ public class FontProperty implements MenuItemStrategy {
     public void execute() {
         Stage fontStage = new Stage();
         fontStage.setTitle("Select Font");
-        ChoiceBox<String> fonts = fontCheckBox();
-        ChoiceBox<Integer> sizes = sizeCheckBox();
+        fontStage.setResizable(false);
+        ChoiceBox<String> fonts = fontChoiceBox();
+        ChoiceBox<Integer> sizes = sizeChoiceBox();
         Button apply = new Button("Apply");
         apply.setOnAction(e -> {
-            textArea.setFont(Font.font(fonts.getSelectionModel().getSelectedItem(),sizes.getSelectionModel().getSelectedItem()));
+            String fontType = fonts.getSelectionModel().getSelectedItem() ;
+            Integer size = sizes.getSelectionModel().getSelectedItem();
+            textArea.setFont(Font.font(fontType != null ? fontType : "Ubuntu Mono", size != null ? size : 22));
             fontStage.close();
         });
         Button cancel = new Button("Cancel");
         cancel.setOnAction(e -> fontStage.close());
 
-        VBox vbox = new VBox(fonts,sizes);
+        HBox vbox = new HBox(fonts,sizes);
         vbox.setSpacing(20);
         vbox.setAlignment(Pos.CENTER);
         HBox hbox = new HBox(apply,cancel);
         hbox.setAlignment(Pos.CENTER);
         hbox.setSpacing(20);
-        BorderPane borderPane = new BorderPane();
-        borderPane.setTop(hbox);
-        borderPane.setCenter(vbox);
+        //BorderPane borderPane = new BorderPane();
+       // borderPane.setCenter(vbox);
+       // borderPane.setCenter(hbox);
         //borderPane.setBottom(showSelectedFont);
-        Scene scene = new Scene(borderPane,400,350);
+        VBox vertical = new VBox(vbox,hbox);
+        vertical.setSpacing(30);
+        vertical.setAlignment(Pos.CENTER);
+        Scene scene = new Scene(vertical,400,350);
         fontStage.setScene(scene);
         fontStage.initModality(Modality.APPLICATION_MODAL);
         fontStage.showAndWait();
     }
 
-    private ChoiceBox<String> fontCheckBox() {
+    private ChoiceBox<String> fontChoiceBox() {
         ChoiceBox<String> fonts = new ChoiceBox<>();
         fonts.getItems().addAll(string);
         return fonts;
     }
 
-    private ChoiceBox<Integer> sizeCheckBox() {
+    private ChoiceBox<Integer> sizeChoiceBox() {
         ChoiceBox<Integer> size = new ChoiceBox<>();
         size.getItems().addAll(numbers);
         return size;
