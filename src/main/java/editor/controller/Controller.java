@@ -3,11 +3,13 @@ import editor.model.MenuItemStrategy;
 import editor.model.feature.FontProperty;
 import editor.model.feature.BackgroundColor;
 import editor.model.items.About;
+import editor.model.items.Help;
 import editor.model.items.OpenFile;
 import editor.model.items.SaveFile;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -44,7 +46,7 @@ public class Controller {
     // initialize textarea with font and size and return textarea
     public TextArea addTextArea() {
         textArea = new TextArea();
-        textArea.setFont(Font.font("Ubuntu Mono",25));
+        textArea.setFont(Font.font("Ubuntu Mono",22));
         return textArea;
     }
 
@@ -83,18 +85,22 @@ public class Controller {
     private void initFileMenu() {
         Menu file = new Menu("File");
         MenuItem newFile = new MenuItem("New File");
+        newFile.setAccelerator(KeyCombination.keyCombination("Ctrl+N"));
         MenuItem openFile = new MenuItem("Open File");
+        openFile.setAccelerator(KeyCombination.keyCombination("Ctrl+O"));
         openFile.setOnAction(e -> {
             itemStrategy = new OpenFile(textArea,stage);
             itemStrategy.execute();
         });
         MenuItem saveFile = new MenuItem("Save");
+        saveFile.setAccelerator(KeyCombination.keyCombination("Ctrl+S"));
         saveFile.setOnAction( e -> {
             itemStrategy = new SaveFile(textArea,stage);
             itemStrategy.execute();
         });
 
         MenuItem exit = new MenuItem("Exit");
+        exit.setAccelerator(KeyCombination.keyCombination("Ctrl+Q"));
         exit.setOnAction(e -> alertBox());
         file.getItems().addAll(newFile, openFile, saveFile, separator, exit);
         menuBar.getMenus().add(file);
@@ -103,9 +109,11 @@ public class Controller {
     // adding menu Setting
     private void initSetting() {
         Menu setting = new Menu("Setting");
+        ToggleGroup toggleGroup = new ToggleGroup();
         RadioMenuItem darkMode = new RadioMenuItem("Dark Mode");
-      //  darkMode.setOnAction(e -> textArea.setStyle("-fx-control-inner-background:gray"));
+       // darkMode.setOnAction(e -> textArea.setStyle("-fx-control-inner-background:gray"));
         MenuItem fullscreen = new MenuItem("Full Screen");
+        fullscreen.setAccelerator(KeyCombination.keyCombination("Ctrl+F"));
         fullscreen.setOnAction(e -> stage.setFullScreen(true));
         MenuItem font = new MenuItem("Change Font");
         font.setOnAction(e -> {
@@ -123,6 +131,11 @@ public class Controller {
     private void initHelp() {
         Menu help = new Menu("Help");
         MenuItem subHelp = new MenuItem("Help");
+        subHelp.setOnAction(e -> {
+            Help helpClass = new Help();
+            helpClass.execute();
+        });
+        subHelp.setAccelerator(KeyCombination.keyCombination("Ctrl+K"));
         help.getItems().addAll(subHelp);
         menuBar.getMenus().add(help);
     }
