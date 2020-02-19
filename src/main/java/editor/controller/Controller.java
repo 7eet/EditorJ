@@ -1,5 +1,6 @@
 package editor.controller;
 import editor.model.MenuItemStrategy;
+import editor.model.feature.FindReplace;
 import editor.model.feature.FontProperty;
 import editor.model.feature.BackgroundColor;
 import editor.model.items.About;
@@ -37,6 +38,8 @@ public class Controller {
         logger.debug("Controller Class: initializing menubar and its item.");
         initFileMenu();
         initSetting();
+        initFont();
+        initBackground();
         initHelp();
         initAbout();
         logger.debug("Contoller Class: initialized.");
@@ -115,16 +118,36 @@ public class Controller {
         MenuItem fullscreen = new MenuItem("Full Screen");
         fullscreen.setAccelerator(KeyCombination.keyCombination("Ctrl+F"));
         fullscreen.setOnAction(e -> stage.setFullScreen(true));
-        MenuItem font = new MenuItem("Change Font");
-        font.setOnAction(e -> {
+
+        setting.getItems().addAll(darkMode, fullscreen);
+        menuBar.getMenus().add(setting);
+    }
+
+    private void initFont() {
+        Menu font = new Menu("Font");
+        MenuItem change_font = new MenuItem("Change Font");
+        change_font.setOnAction(e -> {
             new FontProperty(textArea).execute();
         });
-        MenuItem background_color = new MenuItem("Change Background Color");
+        MenuItem spacing = new MenuItem("Spacing");
+        MenuItem findReplace = new MenuItem("Find & Replace");
+        findReplace.setOnAction(e -> {
+            FindReplace fR = new FindReplace(textArea);
+            fR.execute();
+        });
+        font.getItems().addAll(change_font,spacing,separator,findReplace);
+        menuBar.getMenus().add(font);
+    }
+
+    private void initBackground() {
+        Menu background = new Menu("Background");
+        MenuItem background_color = new MenuItem("Background Color");
         background_color.setOnAction(e -> {
             new BackgroundColor(menuBar,textArea).execute();
         });
-        setting.getItems().addAll(darkMode, fullscreen, separator, font, background_color);
-        menuBar.getMenus().add(setting);
+        MenuItem backgroundImage = new MenuItem("Background Image");
+        background.getItems().addAll(background_color,backgroundImage);
+        menuBar.getMenus().add(background);
     }
 
     // adding Help menu
