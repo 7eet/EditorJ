@@ -30,10 +30,10 @@ public class FindReplace implements MenuItemStrategy {
         stage.setResizable(false);
         stage.showAndWait();
     }
-    private void findText(String find) {
-        if(find == null) return;
+    private int findText(String find) {
+        if(find == null) return 0;
         int s = textArea.getText().indexOf(find);
-        textArea.selectRange(s,s+find.length());
+        return s;
     }
     private VBox addTextFields() {
         TextField find = new TextField();
@@ -43,13 +43,20 @@ public class FindReplace implements MenuItemStrategy {
 
         Button findButton = new Button("Find");
         findButton.setOnAction(e -> {
-            findText(find.getText());
+            int index = findText(find.getText());
+            if (index == 0) return;
+            textArea.selectRange(index,index+find.getLength());
         });
         Button cancelButton = new Button("Cancel");
         cancelButton.setOnAction(e -> {
             stage.close();
         });
         Button replaceButton = new Button("Replace");
+        replaceButton.setOnAction(e -> {
+            int index = findText(find.getText());
+            if(index <= 0 || replace.getLength() == 0) return;
+            textArea.replaceText(index,index+find.getLength(),replace.getText());
+        });
 
         //HBox hBox = new HBox(find,replace,cancel);
         HBox findHBox = new HBox(find,findButton);
