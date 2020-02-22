@@ -1,5 +1,7 @@
 ## EditorJ
-**It is a text editor built with javafx. You can edit files or create new files.**
+**It is a text editor built with javafx. You can edit files or create new files.**<br>
+*Soon you can write code with auto-indentation feature.*
+
 
 ## Features
  - **Full-Screen**
