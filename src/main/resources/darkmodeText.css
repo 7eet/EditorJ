@@ -1,0 +1,4 @@
+.text-area{
+   -fx-control-inner-background: "#262626";
+   -fx-text-fill: "orange"
+}
