@@ -1,7 +1,6 @@
 package editor.controller;
 import editor.model.MenuItemStrategy;
-import editor.model.feature.FontProperty;
-import editor.model.feature.BackgroundColor;
+import editor.model.feature.*;
 import editor.model.items.About;
 import editor.model.items.Help;
 import editor.model.items.OpenFile;
@@ -25,6 +24,7 @@ public class Controller {
     private SeparatorMenuItem separator;
     private MenuItemStrategy itemStrategy;
     private static final Logger logger = LogManager.getLogger(Controller.class);
+    private static boolean isDarkModeOn = false;
 
     public Controller(Stage stage) {
         this.stage = stage;
@@ -37,6 +37,8 @@ public class Controller {
         logger.debug("Controller Class: initializing menubar and its item.");
         initFileMenu();
         initSetting();
+        initFont();
+        initBackground();
         initHelp();
         initAbout();
         logger.debug("Contoller Class: initialized.");
@@ -46,7 +48,7 @@ public class Controller {
     // initialize textarea with font and size and return textarea
     public TextArea addTextArea() {
         textArea = new TextArea();
-        textArea.setFont(Font.font("Ubuntu Mono",22));
+        textArea.setFont(Font.font("Ubuntu",22));
         return textArea;
     }
 
@@ -76,7 +78,9 @@ public class Controller {
         vbox.setAlignment(Pos.CENTER);
         vbox.setSpacing(20.0);
 
-        Scene scene = new Scene(vbox,250,100);
+        Scene scene = new Scene(vbox,350,150);
+        if (isDarkModeOn) scene.getStylesheets().add("file:src/main/resources/darkView");
+        else scene.getStylesheets().add("file:src/main/resources/simpleView");
         alert.setScene(scene);
         alert.showAndWait();
     }
@@ -111,20 +115,52 @@ public class Controller {
         Menu setting = new Menu("Setting");
         ToggleGroup toggleGroup = new ToggleGroup();
         RadioMenuItem darkMode = new RadioMenuItem("Dark Mode");
-       // darkMode.setOnAction(e -> textArea.setStyle("-fx-control-inner-background:gray"));
+        darkMode.setOnAction(e -> {
+                    isDarkModeOn = true;
+                    menuBar.getStylesheets().add("file:src/main/resources/darkmodeMenu.css");
+                    textArea.getStylesheets().add("file:src/main/resources/darkmodeText.css");
+                }
+                //textArea.setStyle("-fx-control-inner-background:gray")
+        );
         MenuItem fullscreen = new MenuItem("Full Screen");
         fullscreen.setAccelerator(KeyCombination.keyCombination("Ctrl+F"));
         fullscreen.setOnAction(e -> stage.setFullScreen(true));
-        MenuItem font = new MenuItem("Change Font");
-        font.setOnAction(e -> {
-            new FontProperty(textArea).execute();
-        });
-        MenuItem background_color = new MenuItem("Change Background Color");
-        background_color.setOnAction(e -> {
-            new BackgroundColor(menuBar,textArea).execute();
-        });
-        setting.getItems().addAll(darkMode, fullscreen, separator, font, background_color);
+
+        setting.getItems().addAll(darkMode, fullscreen);
         menuBar.getMenus().add(setting);
+    }
+
+    private void initFont() {
+        Menu font = new Menu("Font");
+        MenuItem change_font = new MenuItem("Change Font");
+        change_font.setOnAction(e -> {
+            new FontProperty(textArea,isDarkModeOn).execute();
+        });
+        MenuItem spacing = new MenuItem("Spacing");
+        spacing.setOnAction(e -> {
+            new Spacing(textArea,isDarkModeOn).execute();
+        });
+        MenuItem findReplace = new MenuItem("Find & Replace");
+        findReplace.setAccelerator(KeyCombination.keyCombination("Ctrl+H"));
+        findReplace.setOnAction(e -> {
+            new FindReplace(textArea,isDarkModeOn).execute();
+        });
+        font.getItems().addAll(change_font,spacing,separator,findReplace);
+        menuBar.getMenus().add(font);
+    }
+
+    private void initBackground() {
+        Menu background = new Menu("Background");
+        MenuItem background_color = new MenuItem("Background Color");
+        background_color.setOnAction(e -> {
+            new BackgroundColor(menuBar,textArea,isDarkModeOn).execute();
+        });
+        MenuItem backgroundImage = new MenuItem("Background Image");
+        backgroundImage.setOnAction(e -> {
+          new BackImage(textArea).execute();
+        });
+        background.getItems().addAll(background_color,backgroundImage);
+        menuBar.getMenus().add(background);
     }
 
     // adding Help menu
@@ -132,10 +168,9 @@ public class Controller {
         Menu help = new Menu("Help");
         MenuItem subHelp = new MenuItem("Help");
         subHelp.setOnAction(e -> {
-            Help helpClass = new Help();
-            helpClass.execute();
+           new Help(isDarkModeOn).execute();
         });
-        subHelp.setAccelerator(KeyCombination.keyCombination("Ctrl+K"));
+        //subHelp.setAccelerator(KeyCombination.keyCombination("Ctrl+K"));
         help.getItems().addAll(subHelp);
         menuBar.getMenus().add(help);
     }
@@ -144,7 +179,7 @@ public class Controller {
     private void initAbout() {
         Menu about = new Menu("About");
         MenuItem subAbout = new MenuItem("About Application");
-        subAbout.setOnAction(e -> new About().execute());
+        subAbout.setOnAction(e -> new About(isDarkModeOn).execute());
         about.getItems().addAll(subAbout);
         menuBar.getMenus().add(about);
     }

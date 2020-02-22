@@ -1,0 +1,25 @@
+.label {
+    -fx-text-fill: "white";
+    -fx-font-family: "Time New Roman"
+
+}
+.label , .button {
+    -fx-font-size: 18px
+}
+.button {
+    -fx-background-color: #BB86FC;
+    -fx-font-color: "black"
+}
+.root {
+    -fx-background-color: #1F1B24
+}
+
+.choice-box {
+  -fx-background-color: black;
+  -fx-mark-color: orange; // arrow color
+
+}
+.choice-box .context-menu { -fx-background-color: black;
+-fx-text-fill: "white"
+}
+.choice-box .menu-item:focused { -fx-background-color: orange; }

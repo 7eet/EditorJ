@@ -34,7 +34,7 @@ public class Main extends Application {
         borderPane.setCenter(textArea);
         Scene scene = new Scene(borderPane,600,700);
         primaryStage.getIcons().add(new Image("file:src/main/resources/logo.png"));
-        scene.getStylesheets().add("file:src/main/java/editor/main/Main.css");
+        scene.getStylesheets().add("file:src/main/resources/Main.css");
         primaryStage.setScene(scene);
 
         primaryStage.setOnCloseRequest(e -> controller.alertBox());
