@@ -22,6 +22,11 @@ public class About implements MenuItemStrategy {
             "Want source code or to contribute: \n" +
             "\thttps://github.com/7eet/EditorJ\n" +
             "Thank you :)\n";
+
+    private boolean darkMode;
+    public About(boolean darkmode) {
+        this.darkMode = darkmode;
+    }
     @Override
     public void execute() {
         logger.debug("About Class: displaying");
@@ -29,13 +34,15 @@ public class About implements MenuItemStrategy {
         aboutStage.setTitle("About EditorJ");
         Label label = new Label(about);
         label.setLineSpacing(2.0);
-        label.setFont(Font.font("San serif",22));
+       // label.setFont(Font.font("San serif",22));
         Button button = new Button("Feedback");
-        button.setFont(Font.font("San serif",22));
+      //  button.setFont(Font.font("San serif",22));
         VBox vbox = new VBox(label,button);
         vbox.setAlignment(Pos.CENTER_LEFT);
         vbox.setSpacing(30.0);
         Scene scene = new Scene(vbox,600,500);
+        if (darkMode) scene.getStylesheets().add("file:src/main/resources/darkView");
+        else scene.getStylesheets().add("file:src/main/resources/simpleView");
         aboutStage.setScene(scene);
         aboutStage.setResizable(false);
         aboutStage.showAndWait();

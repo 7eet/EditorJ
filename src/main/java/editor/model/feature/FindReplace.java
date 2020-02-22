@@ -14,17 +14,22 @@ import javafx.stage.Stage;
 public class FindReplace implements MenuItemStrategy {
     private TextArea textArea;
     private Stage stage;
-    public FindReplace(TextArea textarea) {
+    private static final Pos pos = Pos.CENTER;
+    private boolean isDarkmode;
+    public FindReplace(TextArea textarea, boolean darkmode) {
         this.stage = new Stage();
         stage.setTitle("Find & Replace");
         this.textArea = textarea;
+        this.isDarkmode = darkmode;
     }
     @Override
     public void execute() {
         VBox vbox = addTextFields();
         vbox.setSpacing(25);
-        vbox.setAlignment(Pos.CENTER);
-        Scene scene = new Scene(vbox,400,150);
+        vbox.setAlignment(pos);
+        Scene scene = new Scene(vbox,550,250);
+        if (isDarkmode) scene.getStylesheets().add("file:src/main/resources/darkView");
+        else scene.getStylesheets().add("file:src/main/resources/simpleView");
         stage.setScene(scene);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setResizable(false);
@@ -44,7 +49,7 @@ public class FindReplace implements MenuItemStrategy {
         Button findButton = new Button("Find");
         findButton.setOnAction(e -> {
             int index = findText(find.getText());
-            if (index == 0) return;
+            if (index < 0) return;
             textArea.selectRange(index,index+find.getLength());
         });
         Button cancelButton = new Button("Cancel");
@@ -54,13 +59,17 @@ public class FindReplace implements MenuItemStrategy {
         Button replaceButton = new Button("Replace");
         replaceButton.setOnAction(e -> {
             int index = findText(find.getText());
-            if(index <= 0 || replace.getLength() == 0) return;
+            if(index < 0 || replace.getLength() == 0) return;
             textArea.replaceText(index,index+find.getLength(),replace.getText());
         });
 
         //HBox hBox = new HBox(find,replace,cancel);
         HBox findHBox = new HBox(find,findButton);
+        findHBox.setAlignment(pos);
+        findHBox.setSpacing(25);
         HBox replaceHBox = new HBox(replace,replaceButton);
+        replaceHBox.setAlignment(pos);
+        replaceHBox.setSpacing(25);
         return new VBox(findHBox,replaceHBox,cancelButton);
     }
 }
