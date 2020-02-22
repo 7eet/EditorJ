@@ -14,7 +14,7 @@
 ## Modify or Add new Features
 
 ### Requirements
- - Gradle 
+ - Gradle 5.2.1
  - Java SE 8
  - IntelliJ
 
